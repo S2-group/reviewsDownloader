@@ -20,12 +20,19 @@ From the root folder run `python downloadReviews.py`
 ## Parameters
 
 APP_LIST = path to file with list of apps for which reviews must be dowloaded
+
 OUT_FILE = path to file where reviews will be saved
+
 PAGES_FILE = path to a temp file used for pause/resume functionality (probably you don't need to change this)
+
 ERROR_LOG = path to file with log of errors encountered during download
+
 MIN_SLEEP = min sleep time between requests 
+
 MAX_SLEEP = max sleep time between requests
+
 SLEEP = fixed sleep between requests 
+
 LONG_SLEEP = sleep time used when blocked by Google Play
 
 ## Troubleshooting
