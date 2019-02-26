@@ -38,4 +38,5 @@ LONG_SLEEP = sleep time used when blocked by Google Play
 ## Troubleshooting
 
 Google Play APIs change often, if the script does not work anymore try running `npm update` from the root folder.
+
 Also check status of possible issues for [https://github.com/facundoolano/google-play-scraper](google-play-scraper) node module. 
