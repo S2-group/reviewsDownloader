@@ -4,7 +4,7 @@ import csv
 from time import sleep
 import json
 
-APP_LIST = "../app_annie_scraper/apps_no_dups.csv"
+APP_LIST = "apps_no_dups.csv"
 OUT_FILE = "reviews/reviews.csv"
 PAGES_FILE = "reviews/pages.csv"
 ERROR_LOG = "reviews_error_log.txt"
