@@ -3,7 +3,7 @@ A python script to download app reviews from the google play store
 
 Requires Python >= 3.6 and Node.js >= 6.0.0
 
-Funtions as a Python wrapper around the [https://github.com/facundoolano/google-play-scraper](google-play-scraper) node module.
+Funtions as a Python wrapper around the [google-play-scraper](https://github.com/facundoolano/google-play-scraper) node module.
 
 Handles pause/resume (if terminated, the script will skip any apps for which it has already downloaded reviews when restarted).
 
@@ -39,4 +39,4 @@ LONG_SLEEP = sleep time used when blocked by Google Play
 
 Google Play APIs change often, if the script does not work anymore try running `npm update` from the root folder.
 
-Also check status of possible issues for [https://github.com/facundoolano/google-play-scraper](google-play-scraper) node module. 
+Also check status of possible issues for [google-play-scraper](https://github.com/facundoolano/google-play-scraper) node module. 
