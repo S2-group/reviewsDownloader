@@ -63,7 +63,7 @@ with open(APP_LIST) as app_list, open(OUT_FILE, "a+") as out_file, open(PAGES_FI
     app_reader = csv.DictReader(app_list, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     pages_writer = csv.DictWriter(out_file, delimiter=';', quoting=csv.QUOTE_MINIMAL, fieldnames=['app_name', 'page'])
     review_writer = csv.DictWriter(out_file, delimiter=';', quoting=csv.QUOTE_MINIMAL,
-                                   fieldnames=['id', 'userName', 'date', 'url', 'score', 'title', 'text'])
+                                   fieldnames=['id', 'userName', 'date', 'url', 'score', 'title', 'text', 'replyText', 'replyDate'])
     for line in app_reader:
         page = last_pages.get(line['package_name'])
 
