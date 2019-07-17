@@ -1,8 +1,9 @@
 import subprocess
-from subprocess import CalledProcessError
-import csv
-from time import sleep
 import json
+import csv
+from datetime import datetime
+from time import sleep
+from subprocess import CalledProcessError
 
 APP_LIST = "apps_no_dups.csv"
 OUT_FILE = "reviews/reviews.csv"
@@ -80,8 +81,8 @@ with open(APP_LIST) as app_list, open(OUT_FILE, "a+") as out_file, open(PAGES_FI
                 if page >= MAX_PAGE:
                     has_more = False
 
-                print("Requesting page {} of app {}".format(page, line['package_name']))
-                reviews = request_reviews(line['package_name'], page)
+                current_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+                print("{} - Requesting page {} of app {}".format(current_time, page, line['package_name']))reviews = request_reviews(line['package_name'], page)
                 for review in reviews:
                     review_dict = json.loads(review)
                     if review_dict['id'] not in downloaded_ids:
