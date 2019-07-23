@@ -14,7 +14,7 @@ MAX_SLEEP = 5
 SLEEP = 5
 LONG_SLEEP = 300
 CSV_NULL_VALUE = ""
-MAX_PAGE = 111
+MAX_PAGE = 2
 separator = "$%$"
 
 
@@ -54,17 +54,25 @@ with open(PAGES_FILE) as pages:
 print("Initializing set of reviews already downloaded")
 # retrieve the ids of the apps we already downloaded
 downloaded_ids = set()
-with open(OUT_FILE) as downloaded_reviews:
-    r_reader = csv.DictReader(downloaded_reviews, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-    for review in r_reader:
-        downloaded_ids.add(review['id'])
-
+try:
+    with open(OUT_FILE) as downloaded_reviews:
+        r_reader = csv.DictReader(downloaded_reviews, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+        for review in r_reader:
+            downloaded_ids.add(review['id'])
+except FileNotFoundError:
+    pass
 
 with open(APP_LIST) as app_list, open(OUT_FILE, "a+") as out_file, open(PAGES_FILE, "a+") as p_file:
     app_reader = csv.DictReader(app_list, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     pages_writer = csv.DictWriter(out_file, delimiter=';', quoting=csv.QUOTE_MINIMAL, fieldnames=['app_name', 'page'])
     review_writer = csv.DictWriter(out_file, delimiter=';', quoting=csv.QUOTE_MINIMAL,
-                                   fieldnames=['id', 'userName', 'date', 'url', 'score', 'title', 'text', 'replyText', 'replyDate'])
+                                   fieldnames=['app_name', 'id', 'userName', 'date', 'url', 'score', 'title', 'text',
+                                               'replyText', 'replyDate'])
+
+    # write header of output file if needed
+    if len(downloaded_ids) == 0:
+        review_writer.writeheader()
+
     for line in app_reader:
         page = last_pages.get(line['package_name'])
 
@@ -82,9 +90,17 @@ with open(APP_LIST) as app_list, open(OUT_FILE, "a+") as out_file, open(PAGES_FI
                     has_more = False
 
                 current_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-                print("{} - Requesting page {} of app {}".format(current_time, page, line['package_name']))reviews = request_reviews(line['package_name'], page)
+                print("{} - Requesting page {} of app {}".format(current_time, page, line['package_name']))
+                reviews = request_reviews(line['package_name'], page)
                 for review in reviews:
                     review_dict = json.loads(review)
+
+                    # Correctly extract review id
+                    review_dict['id'] = review_dict['id'][3:]
+
+                    # Add app name to dict
+                    review_dict['app_name'] = line['package_name']
+
                     if review_dict['id'] not in downloaded_ids:
                         del review_dict['userImage']
                         review_writer.writerow(review_dict)
@@ -95,7 +111,7 @@ with open(APP_LIST) as app_list, open(OUT_FILE, "a+") as out_file, open(PAGES_FI
                     sleep(LONG_SLEEP)
                 elif page >= MAX_PAGE or len(reviews) < 40:
                     print("Retrieved last reviews for {}".format(line['package_name']))
-                    review_writer.writerow({'package_name': line['package_name'], 'page': page})
+                    pages_writer.writerow({'app_name': line['package_name'], 'page': page})
                     p_file.flush()
                     has_more = False
                 else:
